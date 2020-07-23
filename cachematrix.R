@@ -1,15 +1,40 @@
-## Put comments here that give an overall description of what your
-## functions do
+# These functions accept a matrix, inverse it and store the inversed matrix in
+# cache memory
 
-## Write a short comment describing this function
+# makeCacheMatrix is basically a list of 4 functions, which are resetMat, getMat, 
+# getInv, setInv)
+# resetMat can be used to modify the value of x without creating new objects.
 
 makeCacheMatrix <- function(x = matrix()) {
-
+        
+        invMat <- NULL
+        resetMat <- function(y) {
+                x <<- y
+                m <<- NULL
+        }
+        
+        getMat <- function() x
+        setInv <- function(invMat) invMat <<- invMat
+        getInv <- function() invMat
+        list(resetMat = resetMat,
+             getMat = getMat,
+             getInv = getInv,
+             setInv = setInv)
+        
 }
 
-
-## Write a short comment describing this function
+# cacheSolve is actually responsible for Inversion of matrix using solve() function
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+        invMat <- x$getInv()
+        if(!is.null(invMat)) {
+                message("Getting cached data")
+                return(invMat)
+        }
+        mat <- x$getMat()
+        invMat <- solve(mat, ...)
+        x$setInv(invMat)
+        invMat
 }
+
+#All the best
